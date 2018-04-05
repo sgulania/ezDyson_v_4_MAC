@@ -1,0 +1,98 @@
+67,73d66
+< //SG: Radial Function from input
+<   xmlF.reset().node("root").node("free_electron");
+<   double radfn;
+<   radfn=xmlF.getDoubleValue("charge_of_ionized_core");
+< 
+<   std::cout << "Charge of ionized core = " << radfn <<'\n';
+< 
+74a68
+>   printf("Stage 0\n\n"); fflush(stdout);
+77,87c71,72
+< //  Choice between averaging or no averaging
+<   if (NOAVG==molavg)
+<     {
+< //      allCklm.IniCklmCoeff(labgrid,dysorb,RIonz,allRkl,klmgrid);
+<       allCklm.IniCklmCoeff(labgrid,dysorb,RIonz,radfn,klmgrid);
+<     }
+<    else // if (AVG==molavg)
+<     {
+< //      allCklm.IniCklmCoeff(labgrid,dysorb,allRkl,klmgrid);
+<       allCklm.IniCklmCoeff(labgrid,dysorb,radfn,klmgrid);
+<     }
+---
+>   AngleGrid anggrid;
+>   allCklm.IniCklmCoeff(labgrid,dysorb,anggrid,klmgrid);
+89d73
+<   int lmax = klmgrid.LMax();
+91,93d74
+<   int ntheta = 101; 
+<   PAD totalpad(ntheta,nkv);
+<   totalpad.CalcPad(allCklm, molavg);
+102,105d82
+< double *xsectot = new double[nkv];
+< double *xsec1 = new double[nkv];
+< memset(xsec1,0,sizeof(double)*nkv);
+< memset(xsectot,0,sizeof(double)*nkv);
+109,113d85
+<   for (int k=0; k<nkv; k++) //LOOP BY k
+<   { 
+< //    xsec2[k]=totalpad.TotalXSec(k);
+<      xsec1[k]=allCklm.GetSumCklm(k);
+<    }
+115c87
+<   double norm=(8*M_PI*M_PI*4)/(3*C_AU);
+---
+>   double norm=(1.)/(2*M_PI*C_AU);
+117,118d88
+<  
+<   printf("\n\nTotal crossection vs E(eV), in au, using norm=(1/C_AU)*E*k\n");
+121,149d90
+<   printf("[E*2*Pi/(c*k) * |Cklm|^2]\n");
+<   printf("E=IE+E_k,eV   xsec,a.u.\n");
+<   for (int k=0; k<nkv; k++) 
+<     {
+<       double kwave=klmgrid.GetKV(k);
+< 
+<       double ene=kwave*kwave/2. + IE;  //energy of laser, in AU
+<       
+<       double scale=norm*kwave*spinfactor*orbfactor;
+<       xsec1[k] *= scale*dyson_norm;
+<       xsectot[k] = (xsec1[k]);
+< 
+<       printf("%lf", ene*HAR_TO_EV);
+<         printf(" %13.6lf\n",xsectot[k]*ene);
+<     }
+<   printf("\n\nTotal cross-section / E (in a.u.) vs. Ek (in eV):\n");
+<   printf("To be used with xsecFCF script for incorporating FCFs\n");
+<   printf("E_k,eV        xsec/E,a.u. \n");
+< 
+<   for (int k=0; k<nkv; k++) 
+<     {
+<       double kwave=klmgrid.GetKV(k);
+<       double ene=kwave*kwave/2.;  //energy of the electron
+<       
+<       printf("%lf", ene*HAR_TO_EV);
+<       printf("%14.6lf\n",xsectot[k]);
+<     }
+<  
+< 
+156,157c97
+< 
+<   printf("\n\nPADs:\n");
+---
+>   printf("\n\nTotal Cross Sections and Beta Anisotropies:\n");
+171,172c111,112
+<       double sigma_par=totalpad.XSec_par(k)*scale;
+<       double sigma_perp=totalpad.XSec_perp(k)*scale;
+---
+>       double sigma_par=allCklm.GetCPar(k)*scale;
+>       double sigma_perp=allCklm.GetCPerp(k)*scale;
+180,186d119
+< //Write PADs on disk
+<  totalpad.Print(klmgrid);
+<  
+<   delete [] xsec1;
+<   delete [] xsectot;
+< //  delete [] xsec2;
+< 
