@@ -1,0 +1,13 @@
+Python scripts in this folder are for preparing an xml input file for ezDyson from a Q-Chem output file.
+
+To use, just run:
+make_xml_XX.py filename.xml filename.out
+
+Four scripts are available:
+make_xml_IPEA.py is for reference CCSD to IP or EA calculations
+make_xml_EE.py is for EE with IP/EA calculations
+make_xml_SF.py is for SF with IP/EA calculations
+make_xml_molden.py can read molden format from Q-Chem if molden_format=true is used. Useful for just HF MOs or DFT KS orbitals (script only works for closed shell systems).
+ 
+
+

@@ -1,0 +1,24 @@
+$molecule
+-1 1
+F
+$end
+
+$rem
+jobtype                    SP            single point
+method                     eom-ccsd
+BASIS                      aug-cc-pVTZ
+symmetry                   false
+sym_ignore                 true
+purecart                   111           (5D)
+scf_convergence            7
+MAX_SCF_CYCLES             150
+ip_states                  [1]
+cc_trans_prop              true
+cc_do_dyson                true
+cc_t_conv                  7
+eom_davidson_convergence   6
+print_general_basis        true
+molden_format = 1
+$end
+
+
